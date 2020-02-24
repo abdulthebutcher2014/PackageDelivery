@@ -1,0 +1,1 @@
+<footer>Web site for Web and PC Capstone Southeast Community College Spring Semester 2020</footer>
