@@ -59,6 +59,23 @@ Class UserDB{
             return false;
         }
     }
+    public static function is_valid_user_login($userid, $password){
+      $db = Database::getDB();
+      $query = 'SELECT Password FROM users
+              WHERE LogonID = :userid';
+    $statement = $db->prepare($query);
+    $statement->bindValue(':userid', $userid);
+    $statement->execute();
+    $result = $statement->fetch();
+    $statement->closeCursor();
+    $hash = $result['Password'];    
+    if (password_verify($password, $hash)){
+        return true;
+    }
+    else{
+        return false;
+    }
+   }
     
 }
 
