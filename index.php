@@ -3,6 +3,7 @@
 require_once 'model/User.php';
 require_once 'model/user_db.php';
 require_once 'model/PackageDeliveryDB.php';
+require_once 'model/validation.php';
 
 //check to see if there is an adminstrator if not add one with userid/password
 // admin/admin. This will skip validation but give us an adminstrator we can 
@@ -33,6 +34,7 @@ switch ($action) {
         $userid = filter_input(INPUT_POST, "userid");
         $password = filter_input(INPUT_POST, "password");
         $error_message = "";
+        $message="";
         if ($userid === NULL || $password === NULL) {
             $error_message = "Log-in";
             include('view/logon.php');
@@ -49,15 +51,48 @@ switch ($action) {
         break;
     case 'register':
         $errors = array("", "", "");
-        if(!isset($name)){$name="";}
-        if(!isset($logonid)){$logonid="";}
-        if(!isset($password)){$password="";}
+        if (!isset($name)) {
+            $name = "";
+        }
+        if (!isset($logonid)) {
+            $logonid = "";
+        }
+        if (!isset($password)) {
+            $password = "";
+        }
         include('view/Registration.php');
         break;
     case 'request':
+        $message="";
         include ('view/RequestDelivery.php');
         break;
     case 'new_user':
+        $errors = array("", "", "");
+        $message="";
+        $name = filter_input(INPUT_POST, "name");
+        $logonid = filter_input(INPUT_POST, 'logonid');
+        $password = filter_input(INPUT_POST, "password");
+        $errors[0] = validation::nameCheck($name, "Name");
+        $errors[1] = validation::nameCheck($logonid, "Logon-id");
+        $errors[2] = validation::passwordCheck($password, "Password");
+        $count = 0;
+        for ($i = 0; $i < count($errors); $i++) {
+            if($errors[$i]===""){
+                $count++;
+            }
+        }
+        if($count>=3){
+            UserDB::addUser($name, $logonid, $password, 0);
+            $message=$logonid." has been registered";
+            $_SESSION['user'] = $logonid;
+            include('view/RequestDelivery.php');
+        }else{
+            $message="There is an error - user wasn't added.";
+            include ('view/Registration.php');
+        }
+        die();
+        break;
+    case 'update_user':
         
         die();
         break;
