@@ -1,18 +1,22 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-Class User{
+
+Class User {
+
     private $id, $name, $logonid, $password, $isAdministrator;
+
     function __construct($name, $logonid, $password, $isAdministrator) {
         $this->name = $name;
         $this->logonid = $logonid;
         $this->password = $password;
         $this->isAdministrator = $isAdministrator;
     }
+
     function getId() {
         return $this->id;
     }
@@ -33,6 +37,10 @@ Class User{
         return $this->isAdministrator;
     }
 
+    function setId($id) {
+        $this->id = $id;
+    }
+
     function setName($name) {
         $this->name = $name;
     }
@@ -48,6 +56,5 @@ Class User{
     function setIsAdministrator($isAdministrator) {
         $this->isAdministrator = $isAdministrator;
     }
-
 
 }

@@ -31,7 +31,7 @@ if ($action == NULL) {
 
 switch ($action) {
     case 'logout':
-        unset($_SESSION['user']);
+        unset($_SESSION['username']);
         session_destroy();
         header('Location:index.php');
         break;
@@ -40,13 +40,13 @@ switch ($action) {
         $userid = filter_input(INPUT_POST, "userid");
         $password = filter_input(INPUT_POST, "password");
         $error_message = "";
-        $message="";
+        $message = "";
         if ($userid === NULL || $password === NULL) {
             $error_message = "Log-in";
             include('view/logon.php');
         } else {
             if (UserDB::is_valid_user_login($userid, $password)) {
-                $_SESSION['user'] = $userid;
+                $_SESSION['username'] = $userid;
                 include('view/RequestDelivery.php');
             } else {
                 $error_message = "Invalid Credentials";
@@ -69,12 +69,12 @@ switch ($action) {
         include('view/Registration.php');
         break;
     case 'request':
-        $message="";
+        $message = "";
         include ('view/RequestDelivery.php');
         break;
     case 'new_user':
         $errors = array("", "", "");
-        $message="";
+        $message = "";
         $name = filter_input(INPUT_POST, "name");
         $logonid = filter_input(INPUT_POST, 'logonid');
         $password = filter_input(INPUT_POST, "password");
@@ -83,29 +83,32 @@ switch ($action) {
         $errors[2] = validation::passwordCheck($password, "Password");
         $count = 0;
         for ($i = 0; $i < count($errors); $i++) {
-            if($errors[$i]===""){
+            if ($errors[$i] === "") {
                 $count++;
             }
         }
-        if($count>=3){
+        if ($count >= 3) {
             UserDB::addUser($name, $logonid, $password, 0);
-            $message=$logonid." has been registered";
-            $_SESSION['user'] = $logonid; //you are now logged on. remember your password
+            $message = $logonid . " has been registered";
+            $_SESSION['username'] = $logonid; //you are now logged on. remember your password
             include('view/RequestDelivery.php');
-        }else{
-            $message="There is an error - user wasn't added.";
+        } else {
+            $message = "There is an error - user wasn't added.";
             include ('view/Registration.php');
         }
         die();
         break;
     case 'update_user':
         //get a user object for the user
-        $user=UserDB::getUser($_SESSION['username']);
-        $message="";
+        $user = UserDB::getUser($_SESSION['username']);
+        var_dump($user);
+        $message = "";
         $errors = array("", "", "");
-        $name=$user->getName();
-        $logonid=$user->getLogonid();
-        $password="";
+        $name = $user->getName();
+        var_dump($name);
+        //$logonid = $user->getLogonid();
+        $logonid="";
+        $password = "";
         include ('view/updateUser.php');
         die();
         break;
