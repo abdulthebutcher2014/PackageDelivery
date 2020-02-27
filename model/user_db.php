@@ -40,9 +40,9 @@ Class UserDB{
         foreach ($rows as $row) {
             $u = new User($row['Name'], $row['LogonID'], $row['Password'], $row['isAdministrator']);
             $u->setId($row['ID']);
-            $user[] = $u;
+            //$user = $u;
         }
-        return $user;
+        return $u;
     }
     public static function uniqueUsername($logonid) {
         $db = Database::getDB();

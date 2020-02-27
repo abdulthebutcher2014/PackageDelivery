@@ -30,7 +30,13 @@ if ($action == NULL) {
 }
 
 switch ($action) {
+    case 'logout':
+        unset($_SESSION['user']);
+        session_destroy();
+        header('Location:index.php');
+        break;
     case 'login':
+        $errors = array("", "", "");
         $userid = filter_input(INPUT_POST, "userid");
         $password = filter_input(INPUT_POST, "password");
         $error_message = "";
@@ -84,7 +90,7 @@ switch ($action) {
         if($count>=3){
             UserDB::addUser($name, $logonid, $password, 0);
             $message=$logonid." has been registered";
-            $_SESSION['user'] = $logonid;
+            $_SESSION['user'] = $logonid; //you are now logged on. remember your password
             include('view/RequestDelivery.php');
         }else{
             $message="There is an error - user wasn't added.";
@@ -93,7 +99,14 @@ switch ($action) {
         die();
         break;
     case 'update_user':
-        
+        //get a user object for the user
+        $user=UserDB::getUser($_SESSION['username']);
+        $message="";
+        $errors = array("", "", "");
+        $name=$user->getName();
+        $logonid=$user->getLogonid();
+        $password="";
+        include ('view/updateUser.php');
         die();
         break;
 }
