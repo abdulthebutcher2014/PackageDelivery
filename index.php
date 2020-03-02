@@ -101,16 +101,18 @@ switch ($action) {
     case 'update_user':
         //get a user object for the user
         $user = UserDB::getUser($_SESSION['username']);
+        //var_dump($user);
         $message = "";
         $errors = array("", "", "");
-        $name="Phat Ho";
-        //$name = $user->getName();
-        $logonid="pho";
-        //$logonid = $user->getLogonid();
-        //$password = $user->getPassword();
-        if ($user->getIsAdministrator()===1){
-            $users= UserDB::getUsers();
+
+        //$name="Phat Ho";
+        $name = $user->getName();
+        $logonid = $user->getLogonid();
+        $password = $user->getPassword();
+        if ($user->getIsAdministrator() === '1') {
+            $users = UserDB::getUsers();
         }
+        var_dump($users);
         include ('view/updateUser.php');
         die();
         break;
