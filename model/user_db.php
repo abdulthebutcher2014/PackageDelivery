@@ -81,4 +81,17 @@ Class UserDB {
         }
     }
 
+    public static function update_user($name, $logonid, $password, $isAdminstrator) {
+        $db = Database::getDB();
+        $query = 'UPDATE users SET Name=:name, Password=:password, isAdministrator=:isAdministrator WHERE LogonID=:login_id';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':name', $name);
+        $statement->bindValue(':login_id', $logonid);
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $statement->bindValue(':password', $hash);
+        $statement->bindValue(':isAdministrator', $isAdminstrator);
+        $statement->execute();
+        $statement->closeCursor();
+    }
+
 }

@@ -101,15 +101,40 @@ switch ($action) {
     case 'update_user':
         //get a user object for the user
         $user = UserDB::getUser($_SESSION['username']);
-        var_dump($user);
         $message = "";
         $errors = array("", "", "");
-        $name = $user->getName();
-        var_dump($name);
+        $name="Phat Ho";
+        //$name = $user->getName();
+        $logonid="pho";
         //$logonid = $user->getLogonid();
-        $logonid="";
-        $password = "";
+        //$password = $user->getPassword();
+        if ($user->getIsAdministrator()===1){
+            $users= UserDB::getUsers();
+        }
         include ('view/updateUser.php');
+        die();
+        break;
+    case 'update_user2':
+        $name = filter_input(INPUT_POST, "name");
+        $logonid = filter_input(INPUT_POST, 'logonid');
+        $password = filter_input(INPUT_POST, "password");
+        $errors[0] = validation::nameCheck($name, "Name");
+        $errors[1] = validation::nameCheck($logonid, "Logon-id");
+        $errors[2] = validation::passwordCheck($password, "Password");
+        $count = 0;
+        for ($i = 0; $i < count($errors); $i++) {
+            if ($errors[$i] === "") {
+                $count++;
+            }
+        }
+        if ($count >= 3) {
+            UserDB::update_user($name, $logonid, $password, 1);
+            $message = $logonid . " has been updated";
+            include('view/RequestDelivery.php');
+        } else {
+            $message = "There is an error - user wasn't updated.";
+            include ('view/updateUser.php');
+        }
         die();
         break;
 }
