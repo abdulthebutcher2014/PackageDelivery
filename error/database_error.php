@@ -1,4 +1,4 @@
-<?php include '../view/header.php'; ?>
+<?php include 'view/header.php'; ?>
 <main>
     <h1>Database Error</h1>
     <p>There was an error connecting to the database.</p>
@@ -6,4 +6,4 @@
     <p>The database must be running as described in chapter 1.</p>
     <p>Error message: <?php echo htmlspecialchars($error_message); ?></p>
 </main>
-<?php include '../view/footer.php'; ?>
+<?php include 'view/footer.php'; ?>

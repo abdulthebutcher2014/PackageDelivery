@@ -101,25 +101,25 @@ switch ($action) {
     case 'update_user':
         //get a user object for the user
         $user = UserDB::getUser($_SESSION['username']);
-        //var_dump($user);
         $message = "";
         $errors = array("", "", "");
-
-        //$name="Phat Ho";
         $name = $user->getName();
         $logonid = $user->getLogonid();
         $password = $user->getPassword();
-        if ($user->getIsAdministrator() === '1') {
-            $users = UserDB::getUsers();
-        }
-        var_dump($users);
+        $isAdministrator = $user->getIsAdministrator();
+        $users = UserDB::getUsers();
         include ('view/updateUser.php');
         die();
         break;
     case 'update_user2':
-        $name = filter_input(INPUT_POST, "name");
+        
+        $name = filter_input(INPUT_POST, 'name');
         $logonid = filter_input(INPUT_POST, 'logonid');
-        $password = filter_input(INPUT_POST, "password");
+        $password = filter_input(INPUT_POST, 'password');
+        $isAdmin = filter_input(INPUT_POST, 'isadmin');
+        var_dump($isAdmin);
+        $user = UserDB::getUser($_SESSION['username']);
+        $isAdministrator = $user->getIsAdministrator();
         $errors[0] = validation::nameCheck($name, "Name");
         $errors[1] = validation::nameCheck($logonid, "Logon-id");
         $errors[2] = validation::passwordCheck($password, "Password");
@@ -130,13 +130,31 @@ switch ($action) {
             }
         }
         if ($count >= 3) {
-            UserDB::update_user($name, $logonid, $password, 1);
+            UserDB::update_user($name, $logonid, $password, 0);
             $message = $logonid . " has been updated";
             include('view/RequestDelivery.php');
         } else {
             $message = "There is an error - user wasn't updated.";
+            $users = UserDB::getUsers();
             include ('view/updateUser.php');
         }
+        die();
+        break;
+    case 'update_user3':
+        //get a user object for the user
+        $logonid = filter_input(INPUT_GET, 'logonid');
+        $user = UserDB::getUser($logonid);
+
+        $message = "";
+        $errors = array("", "", "");
+        $name = $user->getName();
+        $logonid = $user->getLogonid();
+        $password = $user->getPassword();
+        $isAdministrator = $user->getIsAdministrator();
+
+        $users = UserDB::getUsers();
+
+        include ('view/updateUser.php');
         die();
         break;
 }
