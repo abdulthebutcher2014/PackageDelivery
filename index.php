@@ -29,6 +29,7 @@ if ($action == NULL) {
     }
 }
 
+
 switch ($action) {
     case 'logout':
         unset($_SESSION['username']);
@@ -46,8 +47,25 @@ switch ($action) {
             include('view/logon.php');
         } else {
             if (UserDB::is_valid_user_login($userid, $password)) {
-                $_SESSION['username'] = $userid;
-                include('view/RequestDelivery.php');
+                if ($userid == 'admin') {
+                    var_dump($_SESSION['username']);
+                    if ($password == 'admin') {
+                        $user = UserDB::getUser($_SESSION['username']);
+                        $message = "Admin must update password";
+                        $errors = array("", "", "");
+                        $name = $user->getName();
+                        $logonid = $user->getLogonid();
+                        //$password = $user->getPassword();
+                        $isAdministrator = $user->getIsAdministrator();
+                        $adminuser = UserDB::getUser($_SESSION['username']);
+                        $adminuserpermission = $adminuser->getIsAdministrator();
+                        $users = UserDB::getUsers();
+                        include ('view/updateUser.php');
+                    } else {
+                        $_SESSION['username'] = $userid;
+                        include('view/RequestDelivery.php');
+                    }
+                }
             } else {
                 $error_message = "Invalid Credentials";
                 include('view/logon.php');
@@ -99,7 +117,7 @@ switch ($action) {
         die();
         break;
     case 'update_user':
-        //get a user object for the user
+//get a user object for the user
         $user = UserDB::getUser($_SESSION['username']);
         $message = "";
         $errors = array("", "", "");
@@ -108,7 +126,7 @@ switch ($action) {
         $password = $user->getPassword();
         $isAdministrator = $user->getIsAdministrator();
         $adminuser = UserDB::getUser($_SESSION['username']);
-        $adminuserpermission=$adminuser->getIsAdministrator();
+        $adminuserpermission = $adminuser->getIsAdministrator();
         $users = UserDB::getUsers();
         include ('view/updateUser.php');
         die();
@@ -117,7 +135,7 @@ switch ($action) {
         $name = filter_input(INPUT_POST, 'name');
         $logonid = filter_input(INPUT_POST, 'logonid');
         $password = filter_input(INPUT_POST, 'password');
-        $password2= filter_input(INPUT_POST, 'password2');
+        $password2 = filter_input(INPUT_POST, 'password2');
         $isAdmin = filter_input(INPUT_POST, 'isadmin');
         $admin = 0;
         if ($isAdmin === 'yes') {
@@ -126,19 +144,17 @@ switch ($action) {
         $user = UserDB::getUser($_SESSION['username']);
         $isAdministrator = $user->getIsAdministrator();
         $adminuser = UserDB::getUser($_SESSION['username']);
-        $adminuserpermission=$adminuser->getIsAdministrator();
+        $adminuserpermission = $adminuser->getIsAdministrator();
         $errors[0] = validation::nameCheck($name, "Name");
         $errors[1] = validation::nameCheck($logonid, "Logon-id");
         $errors[2] = validation::passwordCheck($password, "Password");
-        $errors[2] = validation::passwordSame($password, $password2).$errors[2];
+        $errors[2] = validation::passwordSame($password, $password2) . $errors[2];
         $count = 0;
         for ($i = 0; $i < count($errors); $i++) {
             if ($errors[$i] === "") {
                 $count++;
             }
         }
-        //var_dump($count);
-        //var_dump($errors);
         if ($count >= 3) {
             UserDB::update_user($name, $logonid, $password, $admin);
             $message = $logonid . " has been updated";
@@ -151,20 +167,18 @@ switch ($action) {
         die();
         break;
     case 'update_user3':
-        //get a user object for the user
+//get a user object for the user
         $logonid = filter_input(INPUT_GET, 'logonid');
         $user = UserDB::getUser($logonid);
         $adminuser = UserDB::getUser($_SESSION['username']);
-        $adminuserpermission=$adminuser->getIsAdministrator();
+        $adminuserpermission = $adminuser->getIsAdministrator();
         $message = "";
         $errors = array("", "", "");
         $name = $user->getName();
         $logonid = $user->getLogonid();
         $password = $user->getPassword();
         $isAdministrator = $user->getIsAdministrator();
-
         $users = UserDB::getUsers();
-
         include ('view/updateUser.php');
         die();
         break;

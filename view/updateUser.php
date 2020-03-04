@@ -1,6 +1,7 @@
 <?php include 'header.php'; ?>
 <h1>The Update user page</h1>
 <p><?php echo $message;?></p>
+<p><?php echo "User: ".$_SESSION['username'];?></p>
 <form name="update_user" method="POST">
     <input type="hidden" name="action" value="update_user2">
     <label>Name:</label><br>
@@ -16,8 +17,7 @@
     <input type='radio' id='administrator' name='isadmin' value='yes' <?php if($isAdministrator==1){echo "checked";}?>>
     <label for='administrator'>Yes</label> 
     <input type='radio' id='notadmin' name='isadmin' value='no' <?php if($isAdministrator==0){echo "checked";}?>>
-    <label for='notadmin'>No</label><br><br>
-    
+    <label for='notadmin'>No</label><br><br>    
     <?php endif;?>     
     <input type="submit" name='update_user' value="Enter"><br>
 </form>
