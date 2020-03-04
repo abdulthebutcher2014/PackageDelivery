@@ -8,18 +8,21 @@
     <label>Log-on ID:</label><br>
     <input type="text" name="logonid" value="<?php echo $logonid ?>" readonly="true"><span><?php echo $errors[1];?></span><br>
     <label>Password:</label><br>
-    <input type="password" class="text" name="password" value=""><span><?php echo htmlspecialchars($errors[2]);?></span><br>
-    <?php if($isAdministrator==='1'):?>
+    <input type="password" class="text" name="password" value="<?php echo $password?>"><span><?php echo htmlspecialchars($errors[2]);?></span><br>
+    <label>Re-type Password:</label><br>
+    <input type="password" class="text" name="password2" value="<?php echo $password?>"><br><br>
+    <?php if($adminuserpermission==='1'):?>
     <label>Administrator:</label><br>
-    <input type='radio' id='administrator' name='isadmin' value='yes'>
+    <input type='radio' id='administrator' name='isadmin' value='yes' <?php if($isAdministrator==1){echo "checked";}?>>
     <label for='administrator'>Yes</label> 
-    <input type='radio' id='notadmin' name='isadmin' value='no' checked>
+    <input type='radio' id='notadmin' name='isadmin' value='no' <?php if($isAdministrator==0){echo "checked";}?>>
     <label for='notadmin'>No</label><br><br>
+    
+    <?php endif;?>     
     <input type="submit" name='update_user' value="Enter"><br>
-    <?php endif;?>      
 </form>
 
-<?php if ($isAdministrator==='1'): ?>  
+<?php if ($adminuserpermission==='1'): ?>  
 <table>
 <?php foreach ($users as $u) : ?>
         <tr>

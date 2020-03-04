@@ -64,5 +64,12 @@ class validation {
             return $error;
         }
     }
+    public static function passwordSame($password1, $password2){
+        if($password1===$password2){
+            return "";
+        }else{
+            return"Passwords do not match ";
+        }
+    }
 
 }
