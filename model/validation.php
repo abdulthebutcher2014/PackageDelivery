@@ -32,6 +32,22 @@ class validation {
         }
     }
 
+    public static function logonidCheck($arg, $label) {
+        if ($arg === null || $arg === "") {
+            return $label . ' must not be empty';
+        }
+        $leng = strlen($arg);
+        if (is_numeric($arg[0])) {
+            return $label . ' can not start with a number';
+        } else if ($leng < 3 || $leng > 30) {
+            return $label . ' needs to be between 4 and 30 characters';
+        } else if (UserDB::uniqueUsername($arg)) {
+            return $label . ' ' . $arg . ' is already used. Id needs to be unique';
+        } else {
+            return "";
+        }
+    }
+
     public static function passwordCheck($arg, $label) {
 
         $error = "";
@@ -64,10 +80,11 @@ class validation {
             return $error;
         }
     }
-    public static function passwordSame($password1, $password2){
-        if($password1===$password2){
+
+    public static function passwordSame($password1, $password2) {
+        if ($password1 === $password2) {
             return "";
-        }else{
+        } else {
             return"Passwords do not match ";
         }
     }

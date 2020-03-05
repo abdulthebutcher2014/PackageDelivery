@@ -8,7 +8,9 @@
     <label>User ID:</label><br>
     <input type="text" name="logonid" value="<?php echo $logonid ?>"><span><?php echo $errors[1];?></span><br>
     <label>Password:</label><br>
-    <input type="password" class="text" name="password" value="<?php echo $password ?>"><span><?php echo $errors[2];?></span><br><br>
+    <input type="password" class="text" name="password" value="<?php echo $password ?>"><span><?php echo $errors[2];?></span><br>
+    <label>Re-type Password:</label><br>
+    <input type="password" class="text" name="password2" value=""><br><br><br>
     <input type="submit" name='new_user' value="Enter">
 </form>
 <?php include 'footer.php'; ?>
