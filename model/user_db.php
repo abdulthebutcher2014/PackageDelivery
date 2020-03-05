@@ -93,5 +93,13 @@ Class UserDB {
         $statement->execute();
         $statement->closeCursor();
     }
+    public static function deleteUser($id) {
+        $db = Database::getDB();
+        $query = 'DELETE FROM users WHERE LogonID = :user_id';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':user_id', $id);
+        $statement->execute();
+        $statement->closeCursor();
+    }
 
 }

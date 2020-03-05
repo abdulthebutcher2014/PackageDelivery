@@ -47,27 +47,24 @@ switch ($action) {
             include('view/logon.php');
         } else {
             if (UserDB::is_valid_user_login($userid, $password)) {
-                if ($userid == 'admin') {
-                    var_dump($_SESSION['username']);
-                    if ($password == 'admin') {
-                        $user = UserDB::getUser($_SESSION['username']);
-                        $message = "Admin must update password";
-                        $errors = array("", "", "");
-                        $name = $user->getName();
-                        $logonid = $user->getLogonid();
-                        //$password = $user->getPassword();
-                        $isAdministrator = $user->getIsAdministrator();
-                        $adminuser = UserDB::getUser($_SESSION['username']);
-                        $adminuserpermission = $adminuser->getIsAdministrator();
-                        $users = UserDB::getUsers();
-                        include ('view/updateUser.php');
-                    } else {
-                        $_SESSION['username'] = $userid;
-                        include('view/RequestDelivery.php');
-                    }
+                $_SESSION['username'] = $userid;
+                if (UserDB::is_valid_user_login($userid, "admin")) {
+                    $message = "Please change admin password";
+                    $user = UserDB::getUser($_SESSION['username']);
+                    $errors = array("", "", "");
+                    $name = $user->getName();
+                    $logonid = $user->getLogonid();
+                    $password = $user->getPassword();
+                    $isAdministrator = $user->getIsAdministrator();
+                    $adminuser = UserDB::getUser($_SESSION['username']);
+                    $adminuserpermission = $adminuser->getIsAdministrator();
+                    $users = UserDB::getUsers();
+                    include('view/updateUser.php');
+                } else {
+                    include('view/RequestDelivery.php');
                 }
             } else {
-                $error_message = "Invalid Credentials";
+                $error_message = "Please provide correct credentials.";
                 include('view/logon.php');
             }
         }
@@ -180,6 +177,25 @@ switch ($action) {
         $isAdministrator = $user->getIsAdministrator();
         $users = UserDB::getUsers();
         include ('view/updateUser.php');
+        die();
+        break;
+    case 'delete_user':
+        $delete_user = filter_input(INPUT_GET, 'logonid');
+        $user = UserDB::getUser($_SESSION['username']);
+        if ($user->getIsAdministrator() === "1") {
+            UserDB::deleteUser($delete_user);
+        }
+        $message = "User " . $delete_user . " has been removed.";
+        $user = UserDB::getUser($_SESSION['username']);
+        $errors = array("", "", "");
+        $name = $user->getName();
+        $logonid = $user->getLogonid();
+        $password = $user->getPassword();
+        $isAdministrator = $user->getIsAdministrator();
+        $adminuser = UserDB::getUser($_SESSION['username']);
+        $adminuserpermission = $adminuser->getIsAdministrator();
+        $users = UserDB::getUsers();
+        include('view/updateUser.php');
         die();
         break;
 }

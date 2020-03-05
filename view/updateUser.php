@@ -30,7 +30,7 @@
             <th><?php echo $u->getLogonID(); ?></th>
             <th><?php echo $u->getIsAdministrator(); ?></th>
             <td><a href="index.php?action=update_user3&logonid=<?php echo $u->getLogonID();?>">Edit</a></td>
-            <td><a href="index.php?action=delete_delete&logonid=<?php echo $u->getLogonID();?>">Delete</a></td>
+            <td><a href="index.php?action=delete_user&logonid=<?php echo $u->getLogonID();?>">Delete</a></td>
         </tr>
 <?php endforeach; ?>
 </table>
