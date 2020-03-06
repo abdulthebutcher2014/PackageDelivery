@@ -40,8 +40,8 @@ class validation {
         if (is_numeric($arg[0])) {
             return $label . ' can not start with a number';
         } else if ($leng < 3 || $leng > 30) {
-            return $label . ' needs to be between 4 and 30 characters';
-        } else if (UserDB::uniqueUsername($arg)) {
+            return $label . ' needs to be between 3 and 30 characters';
+        } else if (!UserDB::uniqueUsername($arg)) {            
             return $label . ' ' . $arg . ' is already used. Id needs to be unique';
         } else {
             return "";

@@ -95,6 +95,7 @@ switch ($action) {
         $password = filter_input(INPUT_POST, "password");
         $password2 = filter_input(INPUT_POST, "password2");        
         $errors[0] = validation::nameCheck($name, "Name");
+        
         $errors[1]= validation::logonidCheck($logonid, "Logon-ID");
         //$errors[1] = validation::nameCheck($logonid, "Logon-id");
         $errors[2] = validation::passwordCheck($password, "Password");

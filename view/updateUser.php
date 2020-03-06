@@ -24,6 +24,7 @@
 
 <?php if ($adminuserpermission==='1'): ?>  
 <table>
+    <tr><th>Name</th><th>Logon ID</th><th>Administrator</th><th></th><th></th><tr>
 <?php foreach ($users as $u) : ?>
         <tr>
             <th><?php echo $u->getName(); ?></th>

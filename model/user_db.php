@@ -51,7 +51,7 @@ Class UserDB {
     public static function uniqueUsername($logonid) {
         $db = Database::getDB();
         $query = 'SELECT LogonID FROM users
-              WHERE logonid = :logonid';
+              WHERE LogonID = :logonid';
         $statement = $db->prepare($query);
         $statement->bindValue(':logonid', $logonid);
         $statement->execute();
@@ -93,6 +93,7 @@ Class UserDB {
         $statement->execute();
         $statement->closeCursor();
     }
+
     public static function deleteUser($id) {
         $db = Database::getDB();
         $query = 'DELETE FROM users WHERE LogonID = :user_id';
