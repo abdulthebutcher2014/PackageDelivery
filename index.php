@@ -10,7 +10,7 @@ require_once 'model/validation.php';
 // log- on with right away.
 
 if (UserDB::uniqueUsername('admin')) {//We will need to create the user admin in the db
-    UserDB::addUser('Adminstrator', 'admin', 'admin', 1);
+    UserDB::addUser('Adminstrator', 'admin', 'admin', 1, $email);
 }
 
 session_set_cookie_params(3600);
@@ -54,6 +54,7 @@ switch ($action) {
                     $errors = array("", "", "");
                     $name = $user->getName();
                     $logonid = $user->getLogonid();
+                    $email = $user->getEmail();
                     $password = $user->getPassword();
                     $isAdministrator = $user->getIsAdministrator();
                     $adminuser = UserDB::getUser($_SESSION['username']);
@@ -71,12 +72,15 @@ switch ($action) {
         die();
         break;
     case 'register':
-        $errors = array("", "", "");
+        $errors = array("", "", "", "");
         if (!isset($name)) {
             $name = "";
         }
         if (!isset($logonid)) {
             $logonid = "";
+        }
+        if (!isset($email)) {
+            $email = "";
         }
         if (!isset($password)) {
             $password = "";
@@ -88,16 +92,15 @@ switch ($action) {
         include ('view/RequestDelivery.php');
         break;
     case 'new_user':
-        $errors = array("", "", "");
+        $errors = array("", "", "", "");
         $message = "";
         $name = filter_input(INPUT_POST, "name");
         $logonid = filter_input(INPUT_POST, 'logonid');
         $password = filter_input(INPUT_POST, "password");
-        $password2 = filter_input(INPUT_POST, "password2");        
+        $password2 = filter_input(INPUT_POST, "password2");
         $errors[0] = validation::nameCheck($name, "Name");
-        
-        $errors[1]= validation::logonidCheck($logonid, "Logon-ID");
-        //$errors[1] = validation::nameCheck($logonid, "Logon-id");
+        $errors[1] = validation::logonidCheck($logonid, "Logon-ID");
+        $errors[3] = validation::emailCheck($email, "Email");
         $errors[2] = validation::passwordCheck($password, "Password");
         $errors[2] = validation::passwordSame($password, $password2) . $errors[2];
         $count = 0;
@@ -106,8 +109,8 @@ switch ($action) {
                 $count++;
             }
         }
-        if ($count >= 3) {
-            UserDB::addUser($name, $logonid, $password, 0);
+        if ($count >= 4) {
+            UserDB::addUser($name, $logonid, $password, 0, $email);
             $message = $logonid . " has been registered";
             $_SESSION['username'] = $logonid; //you are now logged on. remember your password
             include('view/RequestDelivery.php');
@@ -121,9 +124,10 @@ switch ($action) {
 //get a user object for the user
         $user = UserDB::getUser($_SESSION['username']);
         $message = "";
-        $errors = array("", "", "");
+        $errors = array("", "", "", "");
         $name = $user->getName();
         $logonid = $user->getLogonid();
+        $email = $user->getEmail();
         $password = $user->getPassword();
         $isAdministrator = $user->getIsAdministrator();
         $adminuser = UserDB::getUser($_SESSION['username']);
@@ -135,6 +139,7 @@ switch ($action) {
     case 'update_user2':
         $name = filter_input(INPUT_POST, 'name');
         $logonid = filter_input(INPUT_POST, 'logonid');
+        $email = filter_input(INPUT_POST, 'email');
         $password = filter_input(INPUT_POST, 'password');
         $password2 = filter_input(INPUT_POST, 'password2');
         $isAdmin = filter_input(INPUT_POST, 'isadmin');
@@ -150,14 +155,15 @@ switch ($action) {
         $errors[1] = validation::nameCheck($logonid, "Logon-id");
         $errors[2] = validation::passwordCheck($password, "Password");
         $errors[2] = validation::passwordSame($password, $password2) . $errors[2];
+        $errors[3] = validation::emailCheck($email, "Email");
         $count = 0;
         for ($i = 0; $i < count($errors); $i++) {
             if ($errors[$i] === "") {
                 $count++;
             }
         }
-        if ($count >= 3) {
-            UserDB::update_user($name, $logonid, $password, $admin);
+        if ($count >= 4) {
+            UserDB::update_user($name, $logonid, $password, $admin, $email);
             $message = $logonid . " has been updated";
             include('view/RequestDelivery.php');
         } else {
@@ -174,10 +180,11 @@ switch ($action) {
         $adminuser = UserDB::getUser($_SESSION['username']);
         $adminuserpermission = $adminuser->getIsAdministrator();
         $message = "";
-        $errors = array("", "", "");
+        $errors = array("", "", "", "");
         $name = $user->getName();
         $logonid = $user->getLogonid();
         $password = $user->getPassword();
+        $email = $user->getEmail();
         $isAdministrator = $user->getIsAdministrator();
         $users = UserDB::getUsers();
         include ('view/updateUser.php');
@@ -188,13 +195,16 @@ switch ($action) {
         $user = UserDB::getUser($_SESSION['username']);
         if ($user->getIsAdministrator() === "1") {
             UserDB::deleteUser($delete_user);
+            $message = "User " . $delete_user . " has been removed.";
+        } else {
+            $message = "User " . $delete_user . " has not been removed.";
         }
-        $message = "User " . $delete_user . " has been removed.";
         $user = UserDB::getUser($_SESSION['username']);
-        $errors = array("", "", "");
+        $errors = array("", "", "", "");
         $name = $user->getName();
         $logonid = $user->getLogonid();
         $password = $user->getPassword();
+        $email = $user->getEmail();
         $isAdministrator = $user->getIsAdministrator();
         $adminuser = UserDB::getUser($_SESSION['username']);
         $adminuserpermission = $adminuser->getIsAdministrator();

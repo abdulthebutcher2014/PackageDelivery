@@ -10,11 +10,12 @@ Class User {
 
     private $id, $name, $logonid, $password, $isAdministrator;
 
-    function __construct($name, $logonid, $password, $isAdministrator) {
+    function __construct($name, $logonid, $password, $isAdministrator, $email) {
         $this->name = $name;
         $this->logonid = $logonid;
         $this->password = $password;
         $this->isAdministrator = $isAdministrator;
+        $this->email = $email;
     }
 
     function getId() {
@@ -37,6 +38,10 @@ Class User {
         return $this->isAdministrator;
     }
 
+    function getEmail() {
+        $this->email;
+    }
+
     function setId($id) {
         $this->id = $id;
     }
@@ -55,6 +60,10 @@ Class User {
 
     function setIsAdministrator($isAdministrator) {
         $this->isAdministrator = $isAdministrator;
+    }
+
+    function setEmail($email) {
+        $this->email = $email;
     }
 
 }

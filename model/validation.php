@@ -41,7 +41,7 @@ class validation {
             return $label . ' can not start with a number';
         } else if ($leng < 3 || $leng > 30) {
             return $label . ' needs to be between 3 and 30 characters';
-        } else if (!UserDB::uniqueUsername($arg)) {            
+        } else if (!UserDB::uniqueUsername($arg)) {
             return $label . ' ' . $arg . ' is already used. Id needs to be unique';
         } else {
             return "";
@@ -87,6 +87,41 @@ class validation {
         } else {
             return"Passwords do not match ";
         }
+    }
+
+    public static function emailCheck($email, $label) {
+        $parts = explode("@", $email);
+        if (count($parts) != 2) {
+            return $label . " is invalid";
+        }
+        if (strlen($parts[0]) > 64) {
+            return $label . " is invalid";
+        }
+        if (strlen($parts[1]) > 255) {
+            return $label . " is invalid";
+        }
+
+        $atom = '[[:a1num:]_!#$%&\'*+\/=?^`{|}~-]+';
+        $dotatom = '(\.' . $atom . ')*';
+        $address = '(^' . $atom . $dotatom . '$)';
+        $char = '([^\\\\"])';
+        $esc = '(\\\\[\\\\"])';
+        $text = '(' . $char . '|' . $esc . ')+';
+        $quoted = '(^"' . $text . '"$)';
+        $local_part = '/' . $address . '|' . $quoted . '/';
+        $local_match = preg_match($local_part, $parts[0]);
+        if ($local_match === FALSE || $local_match != 1) {
+            return $label . " is invalid";
+        }
+        $hostname = '([[:a1num:]]([-[:a1num:]]{0,62}[[:a1num:]])?)';
+        $hostnames = '(' . $hostname . '(\.' . $hostname . ')*)';
+        $top = '\.[[:a1num:]]{2,6}';
+        $domain_part = '/^' . $hostnames . $top . '$/';
+        $domain_match = preg_match($domain_part, $parts[1]);
+        if ($domain_match === FALSE || $domain_match != 1) {
+            return $label . " is invalid";
+        }
+        return "";
     }
 
 }

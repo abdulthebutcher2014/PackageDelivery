@@ -2,16 +2,17 @@
 
 Class UserDB {
 
-    public static function addUser($name, $logonid, $password, $isAdminstrator) {
+    public static function addUser($name, $logonid, $password, $isAdminstrator, $email) {
         $db = Database::getDB();
-        $query = 'INSERT INTO users(Name, LogonID, Password, isAdministrator)'
-                . ' VALUES (:name, :login_id, :password, :isAdministrator)';
+        $query = 'INSERT INTO users(Name, LogonID, Password, isAdministrator, Email)'
+                . ' VALUES (:name, :login_id, :password, :isAdministrator, :email)';
         $statement = $db->prepare($query);
         $statement->bindValue(':name', $name);
         $statement->bindValue(':login_id', $logonid);
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $statement->bindValue(':password', $hash);
         $statement->bindValue(':isAdministrator', $isAdminstrator);
+        $statement->bindValue(':email', $email);
         $statement->execute();
         $statement->closeCursor();
     }
@@ -24,7 +25,7 @@ Class UserDB {
         $rows = $statement->fetchAll();
         $statement->closeCursor();
         foreach ($rows as $row) {
-            $u = new User($row['Name'], $row['LogonID'], $row['Password'], $row['isAdministrator']);
+            $u = new User($row['Name'], $row['LogonID'], $row['Password'], $row['isAdministrator'], $row['Email']);
             $u->setID($row['ID']);
             $users[] = $u; // rember not to return an array. but just the one user.
         }
@@ -41,7 +42,7 @@ Class UserDB {
         $rows = $statement->fetchAll();
         $statement->closeCursor();
         foreach ($rows as $row) {
-            $u = new User($row['Name'], $row['LogonID'], $row['Password'], $row['isAdministrator']);
+            $u = new User($row['Name'], $row['LogonID'], $row['Password'], $row['isAdministrator'], $row['Email']);
             $u->setId($row['ID']);
             $user = $u;
         }
@@ -81,15 +82,16 @@ Class UserDB {
         }
     }
 
-    public static function update_user($name, $logonid, $password, $isAdminstrator) {
+    public static function update_user($name, $logonid, $password, $isAdminstrator, $email) {
         $db = Database::getDB();
-        $query = 'UPDATE users SET Name=:name, Password=:password, isAdministrator=:isAdministrator WHERE LogonID=:login_id';
+        $query = 'UPDATE users SET Name=:name, Password=:password, isAdministrator=:isAdministrator, Email=:email WHERE LogonID=:login_id';
         $statement = $db->prepare($query);
         $statement->bindValue(':name', $name);
         $statement->bindValue(':login_id', $logonid);
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $statement->bindValue(':password', $hash);
         $statement->bindValue(':isAdministrator', $isAdminstrator);
+        $statement->bindValue(':email', $email);
         $statement->execute();
         $statement->closeCursor();
     }
