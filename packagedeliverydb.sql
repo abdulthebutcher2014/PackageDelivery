@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 09, 2020 at 05:37 PM
+-- Generation Time: Mar 10, 2020 at 04:28 PM
 -- Server version: 10.3.15-MariaDB
 -- PHP Version: 7.3.6
 
@@ -74,7 +74,8 @@ CREATE TABLE `packages` (
 
 CREATE TABLE `parameters` (
   `ID` int(11) NOT NULL,
-  `Property` varchar(25) NOT NULL
+  `Property` varchar(25) NOT NULL,
+  `value` varchar(254) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -97,8 +98,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`ID`, `Name`, `LogonID`, `Password`, `isAdministrator`, `Email`) VALUES
-(14, 'Adminstrator', 'admin', '$2y$10$tDGs8DK/msR.s/WS0QimIuApqx6pobK14TF8o0q.pCxsx5/nITbrS', 1, ''),
-(15, 'Phat Ho', 'pho', '$2y$10$ult1rGLL9PHOzlMYScsOTuhYKdJtxrmZLrkSdNpxKRnYlpC7ZqKkm', 0, '');
+(15, 'Phat Ho', 'pho', '$2y$10$nevwYasErbOleeRDxKyAe.Km8j5X.6YBuqvO8ZpWbK9eP4scFqu.S', 0, 'today@fun.com'),
+(23, 'Phat Ho', 'today', '$2y$10$Dr/tHNWFRzvKQXd7SjZzAO9KycQ7r1FlpabmQizSXwSMB65tyrIfi', 0, 'today@fun.com'),
+(25, 'Adminstrator', 'admin', '$2y$10$NHHqfVP/.DKpvSYrfDeJbet83W8RgePT2IVyiyjOPJRRXf11Ds8zi', 1, 'admin@jeffware.com');
 
 --
 -- Indexes for dumped tables
@@ -167,7 +169,7 @@ ALTER TABLE `parameters`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Constraints for dumped tables

@@ -5,6 +5,7 @@ require_once 'model/user_db.php';
 require_once 'model/PackageDeliveryDB.php';
 require_once 'model/validation.php';
 require_once 'model/parameters_db.php';
+require_once 'model/Parameter.php';
 
 //check to see if there is an adminstrator if not add one with userid/password
 // admin/admin. This will skip validation but give us an adminstrator we can 
@@ -52,7 +53,7 @@ switch ($action) {
                 if (UserDB::is_valid_user_login($userid, "admin")) {
                     $message = "Please change admin password";
                     $user = UserDB::getUser($_SESSION['username']);
-                    
+
                     $errors = array("", "", "", "");
                     $name = $user->getName();
                     $logonid = $user->getLogonid();
@@ -216,7 +217,15 @@ switch ($action) {
         die();
         break;
     case 'parameters':
-        include('view/parameters.php');
+        $baseprice= ParametersDB::getInitialDeliveryPrice();
+        $milagerate= ParametersDB::getRatePerMile();
+        $errors = array("", "", "", "");
+        $message = "";
+        include('view/frmParameters.php');
+        die();
+        break;
+    case 'parameters2':
+        // get the values from the form and set the values in the database.
         die();
         break;
 }
