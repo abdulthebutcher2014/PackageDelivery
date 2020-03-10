@@ -4,6 +4,7 @@ require_once 'model/User.php';
 require_once 'model/user_db.php';
 require_once 'model/PackageDeliveryDB.php';
 require_once 'model/validation.php';
+require_once 'model/parameters_db.php';
 
 //check to see if there is an adminstrator if not add one with userid/password
 // admin/admin. This will skip validation but give us an adminstrator we can 
@@ -212,6 +213,10 @@ switch ($action) {
         $adminuserpermission = $adminuser->getIsAdministrator();
         $users = UserDB::getUsers();
         include('view/updateUser.php');
+        die();
+        break;
+    case 'parameters':
+        include('view/parameters.php');
         die();
         break;
 }
