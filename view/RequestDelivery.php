@@ -1,4 +1,5 @@
 <?php include 'header.php'; ?>
+<?php include 'navigation.php';?>
 <h1>The Delivery Form</h1>
 <p><a href='index.php?action=logout'>Logout</a><br>
     <a href='index.php?action=update_user&user=<?php echo $_SESSION['username']?>'>Update User Profile</a></p>

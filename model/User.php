@@ -39,7 +39,7 @@ Class User {
     }
 
     function getEmail() {
-        $this->email;
+        return $this->email;
     }
 
     function setId($id) {

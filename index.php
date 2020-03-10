@@ -10,7 +10,7 @@ require_once 'model/validation.php';
 // log- on with right away.
 
 if (UserDB::uniqueUsername('admin')) {//We will need to create the user admin in the db
-    UserDB::addUser('Adminstrator', 'admin', 'admin', 1, $email);
+    UserDB::addUser('Adminstrator', 'admin', 'admin', 1, 'admin@jeffware.com');
 }
 
 session_set_cookie_params(3600);
@@ -51,7 +51,8 @@ switch ($action) {
                 if (UserDB::is_valid_user_login($userid, "admin")) {
                     $message = "Please change admin password";
                     $user = UserDB::getUser($_SESSION['username']);
-                    $errors = array("", "", "");
+                    
+                    $errors = array("", "", "", "");
                     $name = $user->getName();
                     $logonid = $user->getLogonid();
                     $email = $user->getEmail();
@@ -96,6 +97,7 @@ switch ($action) {
         $message = "";
         $name = filter_input(INPUT_POST, "name");
         $logonid = filter_input(INPUT_POST, 'logonid');
+        $email = filter_input(INPUT_POST, 'email');
         $password = filter_input(INPUT_POST, "password");
         $password2 = filter_input(INPUT_POST, "password2");
         $errors[0] = validation::nameCheck($name, "Name");

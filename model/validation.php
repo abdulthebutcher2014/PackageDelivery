@@ -109,18 +109,18 @@ class validation {
         $text = '(' . $char . '|' . $esc . ')+';
         $quoted = '(^"' . $text . '"$)';
         $local_part = '/' . $address . '|' . $quoted . '/';
-        $local_match = preg_match($local_part, $parts[0]);
-        if ($local_match === FALSE || $local_match != 1) {
-            return $label . " is invalid";
-        }
+        //$local_match = preg_match($local_part, $parts[0]);
+        //if ($local_match === FALSE || $local_match != 1) {
+          //  return $label . " is invalid";
+        //}
         $hostname = '([[:a1num:]]([-[:a1num:]]{0,62}[[:a1num:]])?)';
         $hostnames = '(' . $hostname . '(\.' . $hostname . ')*)';
         $top = '\.[[:a1num:]]{2,6}';
         $domain_part = '/^' . $hostnames . $top . '$/';
-        $domain_match = preg_match($domain_part, $parts[1]);
-        if ($domain_match === FALSE || $domain_match != 1) {
-            return $label . " is invalid";
-        }
+        //$domain_match = preg_match($domain_part, $parts[1]);
+        //if ($domain_match === FALSE || $domain_match != 1) {
+          //  return $label . " is invalid";
+        //}
         return "";
     }
 

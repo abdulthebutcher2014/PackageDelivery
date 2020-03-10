@@ -1,4 +1,5 @@
 <?php include 'header.php'; ?>
+
 <h1>The Registration Form</h1>
 <p><a href='index.php?action=logout'>Logout</a><p>
 <form name="new_user" method="POST">
