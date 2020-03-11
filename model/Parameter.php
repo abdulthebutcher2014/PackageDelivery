@@ -10,8 +10,8 @@ class Parameter {
 
     private $id, $parm, $val;
 
-    function __construct($id, $parm, $val) {
-        $this->id = $id;
+    function __construct($parm, $val) {
+       
         $this->parm = $parm;
         $this->val = $val;
     }

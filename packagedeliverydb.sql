@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 10, 2020 at 04:28 PM
--- Server version: 10.3.15-MariaDB
--- PHP Version: 7.3.6
+-- Generation Time: Mar 11, 2020 at 03:15 PM
+-- Server version: 10.4.10-MariaDB
+-- PHP Version: 7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -77,6 +77,14 @@ CREATE TABLE `parameters` (
   `Property` varchar(25) NOT NULL,
   `value` varchar(254) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `parameters`
+--
+
+INSERT INTO `parameters` (`ID`, `Property`, `value`) VALUES
+(1, 'baseprice', '6.5'),
+(2, 'rate', '0.18');
 
 -- --------------------------------------------------------
 
@@ -163,7 +171,7 @@ ALTER TABLE `packages`
 -- AUTO_INCREMENT for table `parameters`
 --
 ALTER TABLE `parameters`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`

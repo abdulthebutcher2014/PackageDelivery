@@ -11,7 +11,7 @@ class validation {
     }
 
     public static function validAmount($arg, $label) {
-        if (preg_match('/\d+(\.\d{1,2})?/', $arg)) { //found this regex at https://stackoverflow.com/questions/308122/simple-regular-expression-for-a-decimal-with-a-precision-of-2
+        if (!preg_match('/\d+(\.\d{1,2})?/', $arg)) { //found this regex at https://stackoverflow.com/questions/308122/simple-regular-expression-for-a-decimal-with-a-precision-of-2
             return $label . ' must a valid dollar amount';
         } else {
             return "";

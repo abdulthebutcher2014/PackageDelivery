@@ -217,15 +217,28 @@ switch ($action) {
         die();
         break;
     case 'parameters':
-        $baseprice= ParametersDB::getInitialDeliveryPrice();
-        $milagerate= ParametersDB::getRatePerMile();
+        $baseprice = ParametersDB::getInitialDeliveryPrice();
+        $milagerate = ParametersDB::getRatePerMile();
         $errors = array("", "", "", "");
-        $message = "";
+        $message="";
         include('view/frmParameters.php');
         die();
         break;
     case 'parameters2':
         // get the values from the form and set the values in the database.
+        $message="";
+        $errors = array("", "", "", "");
+        $baseprice = filter_input(INPUT_POST, 'baseprice');        
+        $milagerate = filter_input(INPUT_POST, 'milagerate');
+        $errors[0] = validation::validAmount($baseprice, 'Flat-rate');
+        $errors[1] = validation::validAmount($milagerate, 'Milage-rate');
+        if($errors[0]=="" && $errors[1]==""){
+            $message="Values for flat rate and Milage have been set.";
+            $errors = array("", "", "", "");
+            ParametersDB::setInitialDeliveryPrice($baseprice);
+            ParametersDB::setRatePerMile($milagerate);
+        }
+        include ('view/frmParameters.php');
         die();
         break;
 }
