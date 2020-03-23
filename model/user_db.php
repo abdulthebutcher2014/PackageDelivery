@@ -27,7 +27,7 @@ Class UserDB {
         foreach ($rows as $row) {
             $u = new User($row['Name'], $row['LogonID'], $row['Password'], $row['isAdministrator'], $row['Email']);
             $u->setID($row['ID']);
-            $users[] = $u; // rember not to return an array. but just the one user.
+            $users[] = $u; 
         }
         return $users;
     }

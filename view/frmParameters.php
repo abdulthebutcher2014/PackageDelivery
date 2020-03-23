@@ -11,4 +11,4 @@
     <input type="text" name="milagerate" value="<?php echo $milagerate ?>"<span><?php echo $errors[1];?></span><br>
     <input type="submit" name="parameters" value="Set Parameters">
 </form>
-
+<?php include 'footer.php'; ?>

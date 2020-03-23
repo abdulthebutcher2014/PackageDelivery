@@ -6,6 +6,8 @@ require_once 'model/PackageDeliveryDB.php';
 require_once 'model/validation.php';
 require_once 'model/parameters_db.php';
 require_once 'model/Parameter.php';
+require_once 'model/Location.php';
+require_once 'model/location_db.php';
 
 //check to see if there is an adminstrator if not add one with userid/password
 // admin/admin. This will skip validation but give us an adminstrator we can 
@@ -220,25 +222,106 @@ switch ($action) {
         $baseprice = ParametersDB::getInitialDeliveryPrice();
         $milagerate = ParametersDB::getRatePerMile();
         $errors = array("", "", "", "");
-        $message="";
+        $message = "";
         include('view/frmParameters.php');
         die();
         break;
     case 'parameters2':
         // get the values from the form and set the values in the database.
-        $message="";
+        $message = "";
         $errors = array("", "", "", "");
-        $baseprice = filter_input(INPUT_POST, 'baseprice');        
+        $baseprice = filter_input(INPUT_POST, 'baseprice');
         $milagerate = filter_input(INPUT_POST, 'milagerate');
         $errors[0] = validation::validAmount($baseprice, 'Flat-rate');
         $errors[1] = validation::validAmount($milagerate, 'Milage-rate');
-        if($errors[0]=="" && $errors[1]==""){
-            $message="Values for flat rate and Milage have been set.";
+        if ($errors[0] == "" && $errors[1] == "") {
+            $message = "Values for flat rate and Milage have been set.";
             $errors = array("", "", "", "");
             ParametersDB::setInitialDeliveryPrice($baseprice);
             ParametersDB::setRatePerMile($milagerate);
         }
         include ('view/frmParameters.php');
+        die();
+        break;
+    case 'locations':
+        $message = "";
+        $errors = array("", "", "", "");
+        $city = filter_input(INPUT_POST, 'city');
+        $state = filter_input(INPUT_POST, 'state');
+        $distance = filter_input(INPUT_POST, 'distance');
+        $locations = location_db::getLocations();
+
+        include('view/frmLocations.php');
+        die();
+        break;
+    case 'add_location':
+        $message = "";
+        $errors = array("", "", "");
+        $city = filter_input(INPUT_POST, 'city');
+        $state = filter_input(INPUT_POST, 'state');
+        $distance = filter_input(INPUT_POST, 'distance');
+        $errors[0] = validation::cityCheck($city, 'City');
+        $errors[1] = validation::stateCheck($state, 'State');
+        $errors[2] = validation::validDistance($distance, 'Distance');
+
+        $count = 0;
+        for ($i = 0; $i < count($errors); $i++) {
+            if ($errors[$i] === "") {
+                $count++;
+            }
+        }
+
+        if ($count >= 3) {
+            location_db::addLocation($city, $state, $distance);
+            $locations = location_db::getLocations();
+            $message = $city . ", " . $state . " has been registered";
+            $city = "";
+            $state = "";
+            $distance = "";
+            include('view/frmLocations.php');
+        } else {
+            $locations = location_db::getLocations();
+            $message = "There is an error - user wasn't added.";
+            include ('view/frmLocations.php');
+        }
+        die();
+        break;
+    case 'delete_location':
+        $id = filter_input(INPUT_GET, 'location_id');
+        location_db::deleteLocation($id);
+        $locations = location_db::getLocations();
+        $message = "";
+        $errors = array("", "", "");
+        $city = "";
+        $state = "";
+        $distance = "";
+        include ('view/frmLocations.php');
+        die();
+        break;
+    case 'update_location':
+        $id = filter_input(INPUT_GET, 'location_id');
+        $location = location_db::getLocation($id);
+
+        $locations = location_db::getLocations();
+        $city = $location->getCity();
+        $state = $location->getState();
+        $distance = $location->getDistance();
+        $message = "";
+        $errors = array("", "", "");
+        include ('view/frmLocations.php');
+        die();
+        break;
+    case 'update_location2':
+        $id = filter_input(INPUT_GET, 'location_id');
+        $location = location_db::getLocation($id);
+        $city = $location->getCity();
+        $state = $location->getState();
+        $distance=$location->getDistance();
+        location_db::update_location($id, $city, $state, $distance);
+        $locations = location_db::getLocations();        
+        $message = "";
+        $errors = array("", "", "");    
+        include ('view/frmLocations.php');
         die();
         break;
 }

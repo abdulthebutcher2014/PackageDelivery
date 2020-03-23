@@ -10,7 +10,15 @@ class validation {
         }
     }
 
-    public static function validAmount($arg, $label) {
+    public static function validDistance($arg, $label) {
+        if (!is_integer($arg)) { 
+            //return $label . ' must be a value in miles';
+            return "";
+        } else {
+            return "";
+        }
+    }
+    public static function validAmount($arg, $label){
         if (!preg_match('/\d+(\.\d{1,2})?/', $arg)) { //found this regex at https://stackoverflow.com/questions/308122/simple-regular-expression-for-a-decimal-with-a-precision-of-2
             return $label . ' must a valid dollar amount';
         } else {
@@ -27,6 +35,23 @@ class validation {
             return $label . ' can not start with a number';
         } else if ($leng < 3 || $leng > 30) {
             return $label . ' needs to be between 4 and 30 characters';
+        } else {
+            return "";
+        }
+    }
+
+    public static function cityCheck($arg, $label) {
+        if ($arg === null || $arg === "") {
+            return $label . ' must not be empty';
+        }else{
+            return "";
+        }
+    }
+
+    public static function stateCheck($arg, $label) {
+        $lengt = strlen($arg);
+        if ($lengt !== 2) {
+            return $label . ' needs to be two characters';
         } else {
             return "";
         }
@@ -111,7 +136,7 @@ class validation {
         $local_part = '/' . $address . '|' . $quoted . '/';
         //$local_match = preg_match($local_part, $parts[0]);
         //if ($local_match === FALSE || $local_match != 1) {
-          //  return $label . " is invalid";
+        //  return $label . " is invalid";
         //}
         $hostname = '([[:a1num:]]([-[:a1num:]]{0,62}[[:a1num:]])?)';
         $hostnames = '(' . $hostname . '(\.' . $hostname . ')*)';
@@ -119,7 +144,7 @@ class validation {
         $domain_part = '/^' . $hostnames . $top . '$/';
         //$domain_match = preg_match($domain_part, $parts[1]);
         //if ($domain_match === FALSE || $domain_match != 1) {
-          //  return $label . " is invalid";
+        //  return $label . " is invalid";
         //}
         return "";
     }
