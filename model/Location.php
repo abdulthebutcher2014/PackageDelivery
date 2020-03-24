@@ -38,7 +38,8 @@ class Location {
     function setDistance($distance) {
         $this->distance = $distance;
     }
-
-
+    function getLocation($city, $state){
+        return $this->$city." ".$this->$state;
+    }
 
 }
