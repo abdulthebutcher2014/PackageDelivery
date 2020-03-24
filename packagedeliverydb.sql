@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2020 at 06:26 PM
+-- Generation Time: Mar 24, 2020 at 08:54 PM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.3.7
 
@@ -37,8 +37,7 @@ CREATE TABLE `deliveries` (
   `Total` decimal(10,0) NOT NULL,
   `package` int(11) NOT NULL,
   `toUser` int(11) NOT NULL,
-  `fromUser` int(11) NOT NULL,
-  `Status` varchar(20) NOT NULL
+  `fromUser` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
