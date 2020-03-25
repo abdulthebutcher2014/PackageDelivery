@@ -8,6 +8,10 @@ require_once 'model/parameters_db.php';
 require_once 'model/Parameter.php';
 require_once 'model/Location.php';
 require_once 'model/location_db.php';
+require_once 'model/delivery_db.php';
+require_once 'model/delivery.php';
+require_once 'model/package_db.php';
+require_once 'model/package.php';
 
 //check to see if there is an adminstrator if not add one with userid/password
 // admin/admin. This will skip validation but give us an adminstrator we can 
@@ -94,7 +98,22 @@ switch ($action) {
         break;
     case 'request':
         $message = "";
+        $location = location_db::getLocations();
+        $user = UserDB::getUsers();
+
         include ('view/RequestDelivery.php');
+        die();
+        break;
+    case 'new_delivery':
+        $deliveries = array($_POST['from_location'], $_POST['to_location']);
+        $delivery_from = location_db::getLocation($deliveries[0]);
+        $delivery_to = location_db::getLocation($deliveries[1]);
+        $distance = $delivery_to->getDistance();
+        $total=$distance*ParametersDB::getRatePerMile()+ParametersDB::getInitialDeliveryPrice();
+        $message = "";
+        include ('view/NewDelivery.php');
+
+        die();
         break;
     case 'new_user':
         $errors = array("", "", "", "");
@@ -316,11 +335,11 @@ switch ($action) {
         $location = location_db::getLocation($id);
         $city = $location->getCity();
         $state = $location->getState();
-        $distance=$location->getDistance();
+        $distance = $location->getDistance();
         location_db::update_location($id, $city, $state, $distance);
-        $locations = location_db::getLocations();        
+        $locations = location_db::getLocations();
         $message = "";
-        $errors = array("", "", "");    
+        $errors = array("", "", "");
         include ('view/frmLocations.php');
         die();
         break;

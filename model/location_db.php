@@ -20,11 +20,13 @@ class location_db {
         $statement->execute();
         $rows = $statement->fetchAll();
         $statement->closeCursor();
+        
         foreach ($rows as $row) {
             $l = new Location($row['City'], $row['State'], $row['Distance']);
             $l->setID($row['ID']);
             $locations[] = $l; 
         }
+        
         return $locations;
     }
     public static function getLocation($id) {
