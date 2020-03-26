@@ -14,20 +14,16 @@
             <option value="<?php echo $l->getID(); ?>"><?php echo $l->getLocation(); ?></option>  
         <?php endforeach; ?>
     </select><br>
-    <label>Distance (Miles):</label><br>
-    <input type="text" id="distance" readonly><br>
-    <label>Total ($):</label><br>  
-    <input type="text" id="total" readonly><br>
-    <input type="hidden" name='package_id' value="package_id">
+    
 
     <label>Sender:</label><br>
-    <select id="to_user">
+    <select id="from_user" name="from_user">
         <?php foreach ($user as $u) : ?>
             <option value="<?php echo $u->getID(); ?>"><?php echo $u->getName(); ?></option>  
         <?php endforeach; ?>
     </select><br>
     <label>Receiver:</label><br>
-    <select id="from_user">
+    <select id="to_user" name="to_user">
         <?php foreach ($user as $u) : ?>
             <option value="<?php echo $u->getID(); ?>"><?php echo $u->getName(); ?></option>  
         <?php endforeach; ?>

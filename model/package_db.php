@@ -10,6 +10,7 @@ class package_db {
         $statement->bindValue(':status', $status);
         $statement->execute();
         $statement->closeCursor();
+        return mysql_insert_id();
     }
 
     public static function updatePackage($id, $status) {

@@ -1,10 +1,9 @@
 <?php include 'header.php'; ?>
 <?php include 'navigation.php'; ?>
 <h1>Request Delivery</h1>
-<p><a href='index.php?action=logout'>Logout</a><br>
-    <a href='index.php?action=update_user&user=<?php echo $_SESSION['username'] ?>'>Update User Profile</a></p>
+
 <form name="new_delivery" method="POST">
-    <input type="hidden" name="action" value="new_delivery">
+    <input type="hidden" name="action" value="approve_delivery">
     <label>Delivery From:</label><br>
     <select id="from_location" disabled>
         <option value="<?php echo $deliveries[0]; ?>"><?php echo $delivery_from->getLocation(); ?></option>        
@@ -20,18 +19,19 @@
     <input type="hidden" name='package_id' value="package_id">
 
     <label>Sender:</label><br>
-    <select id="to_user">
-        <?php foreach ($user as $u) : ?>
-            <option value="<?php echo $u->getID(); ?>"><?php echo $u->getName(); ?></option>  
-        <?php endforeach; ?>
+    <select id="to_user" disabled="">
+        
+            <option value="<?php echo $user_from->getID(); ?>"><?php echo $user_from->getName(); ?></option>  
+      
     </select><br>
     <label>Receiver:</label><br>
-    <select id="from_user">
-        <?php foreach ($user as $u) : ?>
-            <option value="<?php echo $u->getID(); ?>"><?php echo $u->getName(); ?></option>  
-        <?php endforeach; ?>
+    <select id="from_user" disabled="">
+        
+            <option value="<?php echo $user_from->getID(); ?>"><?php echo $user_from->getName(); ?></option>  
+        
     </select><br>
-     <input type="submit" name='new_delivery' value="Submit">    
+    <a href='index.php?action=request'>Cancel</a>
+     <input type="submit" name='new_delivery' value="Approve">    
 </form>
 <p><?php echo $message; ?></p>
 <?php include 'footer.php'; ?>
