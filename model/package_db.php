@@ -7,10 +7,11 @@ class package_db {
         $query = 'INSERT INTO packages(status)'
                 . ' VALUES (:status)';
         $statement = $db->prepare($query);
+        
         $statement->bindValue(':status', $status);
         $statement->execute();
         $statement->closeCursor();
-        return mysql_insert_id();
+        return 1;
     }
 
     public static function updatePackage($id, $status) {
