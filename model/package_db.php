@@ -7,11 +7,11 @@ class package_db {
         $query = 'INSERT INTO packages(status)'
                 . ' VALUES (:status)';
         $statement = $db->prepare($query);
-        
         $statement->bindValue(':status', $status);
         $statement->execute();
         $statement->closeCursor();
-        return 1;
+        $package_id = $db->lastInsertId();
+        return $package_id;
     }
 
     public static function updatePackage($id, $status) {
@@ -19,7 +19,7 @@ class package_db {
         $query = 'UPDATE packages SET status=:status where ID=:id';
         $statement = $db->prepare($query);
         $statement->bindValue(':id', $id);
-        $statement->bindValue(':status', $id);
+        $statement->bindValue(':status', $status);
         $statement->execute();
         $statement->closeCursor();
     }
@@ -40,7 +40,7 @@ class package_db {
     }
 
     public static function getPackage($id) {
-       $db = Database::getDB();
+        $db = Database::getDB();
         $query = 'SELECT * FROM packages
               WHERE ID = :id';
         $statement = $db->prepare($query);
@@ -53,7 +53,7 @@ class package_db {
             $p->setId($row['ID']);
             $package = $p;
         }
-        return $package; 
+        return $package;
     }
 
 }

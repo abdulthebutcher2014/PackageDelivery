@@ -26,12 +26,12 @@
         <option value="<?php echo $user_from->getID(); ?>" selected><?php echo $user_from->getName(); ?></option>  
       
     </select><br>
-    <input type="hidden" name="from_user" value="<?php echo $user_from->getID(); ?>"
+    <input type="hidden" name="from_user" value="<?php echo $user_from->getID(); ?>">
     <label>Receiver:</label><br>
     <select id="from_user" disabled="" name="from_user">        
             <option value="<?php echo $user_from->getID(); ?>" selected><?php echo $user_from->getName(); ?></option>         
     </select><br>
-    <input type="hidden" name="to_user" value="<?php echo $user_to->getID(); ?>"
+    <input type="hidden" name="to_user" value="<?php echo $user_to->getID(); ?>">
     <a href='index.php?action=request'>Cancel</a>
      <input type="submit" name='new_delivery' value="Approve">    
 </form>

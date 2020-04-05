@@ -5,4 +5,5 @@
     <title>Package Delivery Service</title>
     
     <link rel="stylesheet" href="packageDelivery.css">
+    <link rel="icon" href="image/index.png" type="image/icon type">
 </head>

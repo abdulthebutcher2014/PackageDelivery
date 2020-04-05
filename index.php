@@ -13,6 +13,7 @@ require_once 'model/delivery.php';
 require_once 'model/package_db.php';
 require_once 'model/package.php';
 require_once 'model/SendNotifiation.php';
+require_once 'model/Delivery_display.php';
 
 //check to see if there is an adminstrator if not add one with userid/password
 // admin/admin. This will skip validation but give us an adminstrator we can 
@@ -122,22 +123,17 @@ switch ($action) {
         die();
         break;
     case 'approve_delivery':
-        $deliveries = array($_POST['from_location'], $_POST['to_location'], $_POST['from_user'], $_POST['to_user'], $_POST['distance'], $_POST['total']);
-        
+        //$deliveries = array($_POST['from_location'], $_POST['to_location'], $_POST['from_user'], $_POST['to_user'], $_POST['distance'], $_POST['total']);
+        $deliveries = array(filter_input(INPUT_POST, 'from_location'), filter_input(INPUT_POST, 'to_location'), filter_input(INPUT_POST, 'from_user'), filter_input(INPUT_POST, 'to_user'), filter_input(INPUT_POST, 'distance'), filter_input(INPUT_POST, 'total'));
         $delivery_from = location_db::getLocation($deliveries[0]);
-
         $delivery_to = location_db::getLocation($deliveries[1]);
-        //var_dump($delivery_to);
         $user_from = UserDB::getUserByID($deliveries[2]);
-        //var_dump($user_from);
         $user_to = UserDB::getUserByID($deliveries[3]);
-        //var_dump($user_to);
         $distance = filter_input(INPUT_POST, 'distance');
         $total = filter_input(INPUT_POST, 'total');
         //now insert a new package
-        //$package_id= package_db::addPackage("Recieved");
-        $package_id=5;
-//        //now insert a new delivery
+        $package_id = package_db::addPackage("Recieved");
+        //now insert a new delivery
         delivery_db::addDelivery($delivery_from->getId(), $delivery_to->getId(), $total, $package_id, $user_to->getId(), $user_from->getId());
 //        //set up and send e-mail
 //        $email_sender=$user_from->getEmail();
@@ -148,7 +144,8 @@ switch ($action) {
 //        $subject="Expect to recieve package ". $package_id. " .";
 //        $message="Looke for a packag from delivery service.";
 //        mail($email_reciever,$subject,$message); 
-        //include ('view/ApproveDelivery.php');
+        $message = "Thank you for your request";
+        include ('view/ApproveDelivery.php');
         die();
         break;
     case 'new_user':
@@ -377,6 +374,15 @@ switch ($action) {
         $message = "";
         $errors = array("", "", "");
         include ('view/frmLocations.php');
+        die();
+        break;
+    case 'view_my_deliveries':
+        $userid = ($_SESSION['username']);
+        //get outbound deliveries
+        $incoming_deliveries = delivery_db::getOutGoingDeliveries($userid);
+        //get inbound deliveries.
+        $outgoing_deliveries = delivery_db::getIncomingDeliveries($userid);
+        include('view/view_my_delieveries.php');
         die();
         break;
 }
