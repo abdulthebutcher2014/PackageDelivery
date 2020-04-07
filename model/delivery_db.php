@@ -55,28 +55,31 @@ class delivery_db {
 
     public static function getOutGoingDeliveries($userid) {
         $db = Database::getDB();
-        $query = 'SELECT deliveries.ID as DeliverieID, users.Name ,locations.City,'
-                . ' locations.State, packages.status FROM `deliveries`'
+        $query = 'SELECT deliveries.ID as DeliveryID, users.Name, locations.City,'
+                . ' locations.State, packages.ID as PackageID, packages.status FROM `deliveries`'
                 . ' join users on users.id=deliveries.toUser join '
                 . 'locations on deliveries.ToLocation = locations.ID '
                 . 'join packages on deliveries.package=packages.id '
                 . 'where deliveries.fromUser=:userid';
+
         $statement = $db->prepare($query);
         $statement->bindValue(':userid', $userid);
+
         $statement->execute();
         $rows = $statement->fetchAll();
+
         $statement->closeCursor();
         foreach ($rows as $row) {
-            $d = new Delivery_display($row['DeliveryID'], $row['Name'], $row['City'], $row['State'], $row['packageID'], $row['status']);
-            $delivery = $d;
+            $d = new Delivery_display($row['DeliveryID'], $row['Name'], $row['City'], $row['State'], $row['PackageID'], $row['status']);
+            $delivery[] = $d;
         }
         return $delivery;
     }
 
     public static function getIncomingDeliveries($userid) {
         $db = Database::getDB();
-        $query = 'SELECT deliveries.ID as DeliverieID, users.Name ,locations.City,'
-                . ' locations.State, packages.status FROM `deliveries`'
+        $query = 'SELECT deliveries.ID as DeliveryID, users.Name, locations.City,'
+                . ' locations.State, packages.ID as packageID, packages.status FROM `deliveries`'
                 . ' join users on users.id=deliveries.fromUser join '
                 . 'locations on deliveries.FromLocation = locations.ID '
                 . 'join packages on deliveries.package=packages.id '
@@ -88,7 +91,7 @@ class delivery_db {
         $statement->closeCursor();
         foreach ($rows as $row) {
             $d = new Delivery_display($row['DeliveryID'], $row['Name'], $row['City'], $row['State'], $row['packageID'], $row['status']);
-            $delivery = $d;
+            $delivery[] = $d;
         }
         return $delivery;
     }

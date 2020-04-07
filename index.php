@@ -378,10 +378,15 @@ switch ($action) {
         break;
     case 'view_my_deliveries':
         $userid = ($_SESSION['username']);
+        $user= UserDB::getUser($userid);
+        $myuserid=$user->getId();
+      
         //get outbound deliveries
-        $incoming_deliveries = delivery_db::getOutGoingDeliveries($userid);
+        $incoming_deliveries = delivery_db::getIncomingDeliveries($myuserid);
+        var_dump($incoming_deliveries);
         //get inbound deliveries.
-        $outgoing_deliveries = delivery_db::getIncomingDeliveries($userid);
+        $outgoing_deliveries = delivery_db::getOutGoingDeliveries($myuserid);
+        var_dump($outgoing_deliveries);
         include('view/view_my_delieveries.php');
         die();
         break;

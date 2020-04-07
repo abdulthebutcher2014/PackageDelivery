@@ -41,6 +41,7 @@ Class UserDB {
         $statement->execute();
         $rows = $statement->fetchAll();
         $statement->closeCursor();
+        
         foreach ($rows as $row) {
             $u = new User($row['Name'], $row['LogonID'], $row['Password'], $row['isAdministrator'], $row['Email']);
             $u->setId($row['ID']);
