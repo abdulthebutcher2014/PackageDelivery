@@ -95,5 +95,23 @@ class delivery_db {
         }
         return $delivery;
     }
+    public static function getAllDeliveries(){
+        $db = Database::getDB();
+        $query = 'SELECT deliveries.ID as DeliveryID, users.Name, locations.City,'
+                . ' locations.State, packages.ID as packageID, packages.status FROM `deliveries`'
+                . ' join users on users.id=deliveries.fromUser join '
+                . 'locations on deliveries.FromLocation = locations.ID '
+                . 'join packages on deliveries.package=packages.id ';
+        $statement = $db->prepare($query);
+        
+        $statement->execute();
+        $rows = $statement->fetchAll();
+        $statement->closeCursor();
+        foreach ($rows as $row) {
+            $d = new Delivery_display($row['DeliveryID'], $row['Name'], $row['City'], $row['State'], $row['packageID'], $row['status']);
+            $delivery[] = $d;
+        }
+        return $delivery;        
+    }
 
 }

@@ -378,16 +378,40 @@ switch ($action) {
         break;
     case 'view_my_deliveries':
         $userid = ($_SESSION['username']);
-        $user= UserDB::getUser($userid);
-        $myuserid=$user->getId();
-      
+        $user = UserDB::getUser($userid);
+        $myuserid = $user->getId();
+
         //get outbound deliveries
         $incoming_deliveries = delivery_db::getIncomingDeliveries($myuserid);
-        var_dump($incoming_deliveries);
+
         //get inbound deliveries.
         $outgoing_deliveries = delivery_db::getOutGoingDeliveries($myuserid);
-        var_dump($outgoing_deliveries);
+
         include('view/view_my_delieveries.php');
+        die();
+        break;
+    case 'all_deliveries':
+        $userid = ($_SESSION['username']);
+        $all_deliveries = delivery_db::getAllDeliveries();
+        include('view/view_all_delieveries.php');
+        die();
+        break;
+    case 'update_package';
+        $status = filter_input(INPUT_POST, 'status');
+        $package_id = filter_input(INPUT_POST, 'package_id');
+        var_dump($status);
+        var_dump($package_id);
+        //update the package
+        if ($status == "Recieved") {
+            package_db::updatePackage($package_id, "Sent");
+        }
+        if ($status == "Sent") {
+            package_db::updatePackage($package_id, "Delivered");
+        }
+        $userid = ($_SESSION['username']);
+        $all_deliveries = delivery_db::getAllDeliveries();
+        
+        include('view/view_all_delieveries.php');
         die();
         break;
 }
