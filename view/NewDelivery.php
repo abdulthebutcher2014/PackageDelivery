@@ -17,7 +17,8 @@
     <label>Distance (Miles):</label><br>
     <input type="text" id="distance" value="<?php echo $distance ?>" name="distance" readonly><br>
     <label>Total ($):</label><br>  
-    <input type="text" id="total" value="<?php echo $total ?>" name="total" readonly><br>
+   
+    <input type="text" id="total" value="<?php echo $display_total ?>" name="total" readonly><br>
     
 
     <label>Sender:</label><br>

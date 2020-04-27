@@ -25,6 +25,9 @@ footer { color: #333333;
         font-style: italic;
         padding-top: 100px;
 }
+th{
+    text-align: left;
+}
 tr {
     text-align: center;
 }

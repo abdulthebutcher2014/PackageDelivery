@@ -65,6 +65,9 @@ class Delivery {
     function setFromUser($fromUser) {
         $this->fromUser = $fromUser;
     }
+    function getTotalDisplay(){
+        return number_format($this->getTotal(),2,'.');
+    }
 
 
 

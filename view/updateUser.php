@@ -29,7 +29,7 @@
     <input type="submit" name='update_user' value="Enter"><br>
 </form>
 
-<?php if ($adminuserpermission === '1'): ?>  
+<?php if ($adminuserpermission ==='1'): ?>  
     <table>
         <tr><th>Name</th><th>Logon ID</th><th>Administrator</th><th></th><th></th></tr>
     <?php foreach ($users as $u) : ?>

@@ -18,13 +18,13 @@
 
     <label>Sender:</label><br>
     <select id="from_user" name="from_user">
-        <?php foreach ($user as $u) : ?>
+        <?php foreach ($users as $u) : ?>
             <option value="<?php echo $u->getID(); ?>"><?php echo $u->getName(); ?></option>  
         <?php endforeach; ?>
     </select><br>
     <label>Receiver:</label><br>
     <select id="to_user" name="to_user">
-        <?php foreach ($user as $u) : ?>
+        <?php foreach ($users as $u) : ?>
             <option value="<?php echo $u->getID(); ?>"><?php echo $u->getName(); ?></option>  
         <?php endforeach; ?>
     </select><br>

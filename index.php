@@ -67,14 +67,16 @@ switch ($action) {
                     $logonid = $user->getLogonid();
                     $email = $user->getEmail();
                     $password = $user->getPassword();
-                    $isAdministrator = $user->getIsAdministrator();
-                    $adminuser = UserDB::getUser($_SESSION['username']);
-                    $adminuserpermission = $adminuser->getIsAdministrator();
+                    //$isAdministrator = $user->getIsAdministrator();
+                    //$adminuser = UserDB::getUser($_SESSION['username']);
+                    $adminuserpermission = $user->getIsAdministrator();
                     $users = UserDB::getUsers();
                     include('view/updateUser.php');
                 } else {
+                    $user = UserDB::getUser($_SESSION['username']);
+                    $adminuserpermission = $user->getIsAdministrator();
                     $location = location_db::getLocations();
-                    $user = UserDB::getUsers();
+                    $users = UserDB::getUsers();
                     include('view/RequestDelivery.php');
                 }
             } else {
@@ -101,9 +103,12 @@ switch ($action) {
         include('view/Registration.php');
         break;
     case 'request':
+        $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         $message = "";
         $location = location_db::getLocations();
-        $user = UserDB::getUsers();
+        $users = UserDB::getUsers();
 
         include ('view/RequestDelivery.php');
         die();
@@ -117,6 +122,9 @@ switch ($action) {
         $user_to = UserDB::getUserByID($deliveries[3]);
         $distance = $delivery_to->getDistance();
         $total = $distance * ParametersDB::getRatePerMile() + ParametersDB::getInitialDeliveryPrice();
+
+        $display_total = number_format($total, 2, '.', ',');
+
         $message = "";
         include ('view/NewDelivery.php');
 
@@ -171,6 +179,8 @@ switch ($action) {
             UserDB::addUser($name, $logonid, $password, 0, $email);
             $message = $logonid . " has been registered";
             $_SESSION['username'] = $logonid; //you are now logged on. remember your password
+            $location = location_db::getLocations();
+            $user = UserDB::getUsers();
             include('view/RequestDelivery.php');
         } else {
             $message = "There is an error - user wasn't added.";
@@ -180,7 +190,8 @@ switch ($action) {
         break;
     case 'update_user':
 //get a user object for the user
-        $user = UserDB::getUser($_SESSION['username']);
+        $user = UserDB::getUser($_SESSION['username']);        
+      
         $message = "";
         $errors = array("", "", "", "");
         $name = $user->getName();
@@ -195,6 +206,9 @@ switch ($action) {
         die();
         break;
     case 'update_user2':
+        $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         $name = filter_input(INPUT_POST, 'name');
         $logonid = filter_input(INPUT_POST, 'logonid');
         $email = filter_input(INPUT_POST, 'email');
@@ -206,9 +220,9 @@ switch ($action) {
             $admin = 1;
         }
         $user = UserDB::getUser($_SESSION['username']);
-        $isAdministrator = $user->getIsAdministrator();
-        $adminuser = UserDB::getUser($_SESSION['username']);
-        $adminuserpermission = $adminuser->getIsAdministrator();
+        //$isAdministrator = $user->getIsAdministrator();
+        //$adminuser = UserDB::getUser($user);
+        $adminuserpermission = $user->getIsAdministrator();
         $errors[0] = validation::nameCheck($name, "Name");
         $errors[1] = validation::nameCheck($logonid, "Logon-id");
         $errors[2] = validation::passwordCheck($password, "Password");
@@ -223,7 +237,7 @@ switch ($action) {
         if ($count >= 4) {
             UserDB::update_user($name, $logonid, $password, $admin, $email);
             $message = $logonid . " has been updated";
-            include('view/RequestDelivery.php');
+            include('view/updateUser.php');
         } else {
             $message = "There is an error - user wasn't updated.";
             $users = UserDB::getUsers();
@@ -245,6 +259,7 @@ switch ($action) {
         $email = $user->getEmail();
         $isAdministrator = $user->getIsAdministrator();
         $users = UserDB::getUsers();
+        
         include ('view/updateUser.php');
         die();
         break;
@@ -264,13 +279,15 @@ switch ($action) {
         $password = $user->getPassword();
         $email = $user->getEmail();
         $isAdministrator = $user->getIsAdministrator();
-        $adminuser = UserDB::getUser($_SESSION['username']);
-        $adminuserpermission = $adminuser->getIsAdministrator();
+       
+        $adminuserpermission = $user->getIsAdministrator();
         $users = UserDB::getUsers();
         include('view/updateUser.php');
         die();
         break;
     case 'parameters':
+        $user = UserDB::getUser($_SESSION['username']);
+        $adminuserpermission = $user->getIsAdministrator();
         $baseprice = ParametersDB::getInitialDeliveryPrice();
         $milagerate = ParametersDB::getRatePerMile();
         $errors = array("", "", "", "");
@@ -279,6 +296,8 @@ switch ($action) {
         die();
         break;
     case 'parameters2':
+        $user = UserDB::getUser($_SESSION['username']);
+        $adminuserpermission = $user->getIsAdministrator();
         // get the values from the form and set the values in the database.
         $message = "";
         $errors = array("", "", "", "");
@@ -296,17 +315,26 @@ switch ($action) {
         die();
         break;
     case 'locations':
+        $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         $message = "";
         $errors = array("", "", "", "");
         $city = filter_input(INPUT_POST, 'city');
         $state = filter_input(INPUT_POST, 'state');
         $distance = filter_input(INPUT_POST, 'distance');
         $locations = location_db::getLocations();
-
-        include('view/frmLocations.php');
+        if($adminuserpermission==1){
+            include('view/NewDelivery.php');
+        }else{
+            include('view/frmLocations.php');
+        }        
         die();
         break;
     case 'add_location':
+        $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         $message = "";
         $errors = array("", "", "");
         $city = filter_input(INPUT_POST, 'city');
@@ -333,12 +361,15 @@ switch ($action) {
             include('view/frmLocations.php');
         } else {
             $locations = location_db::getLocations();
-            $message = "There is an error - user wasn't added.";
+            $message = "There is an error - location wasn't added.";
             include ('view/frmLocations.php');
         }
         die();
         break;
     case 'delete_location':
+        $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         $id = filter_input(INPUT_GET, 'location_id');
         location_db::deleteLocation($id);
         $locations = location_db::getLocations();
@@ -351,6 +382,9 @@ switch ($action) {
         die();
         break;
     case 'update_location':
+        $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         $id = filter_input(INPUT_GET, 'location_id');
         $location = location_db::getLocation($id);
 
@@ -364,6 +398,9 @@ switch ($action) {
         die();
         break;
     case 'update_location2':
+        $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         $id = filter_input(INPUT_GET, 'location_id');
         $location = location_db::getLocation($id);
         $city = $location->getCity();
@@ -379,11 +416,12 @@ switch ($action) {
     case 'view_my_deliveries':
         $userid = ($_SESSION['username']);
         $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         $myuserid = $user->getId();
-
+        
         //get outbound deliveries
         $incoming_deliveries = delivery_db::getIncomingDeliveries($myuserid);
-
+     
         //get inbound deliveries.
         $outgoing_deliveries = delivery_db::getOutGoingDeliveries($myuserid);
 
@@ -392,6 +430,9 @@ switch ($action) {
         break;
     case 'all_deliveries':
         $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
+
         $all_deliveries = delivery_db::getAllDeliveries();
         include('view/view_all_delieveries.php');
         die();
@@ -410,7 +451,7 @@ switch ($action) {
         }
         $userid = ($_SESSION['username']);
         $all_deliveries = delivery_db::getAllDeliveries();
-        
+
         include('view/view_all_delieveries.php');
         die();
         break;
