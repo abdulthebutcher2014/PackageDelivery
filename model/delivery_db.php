@@ -60,8 +60,8 @@ class delivery_db {
         $db = Database::getDB();
         $query = 'SELECT deliveries.ID as DeliveryID, users.Name, locations.City,'
                 . ' locations.State, packages.ID as PackageID, packages.status FROM `deliveries`'
-                . ' join users on users.id=deliveries.toUser join '
-                . 'locations on deliveries.ToLocation = locations.ID '
+                . ' join users on users.id=deliveries.fromUser join '
+                . 'locations on deliveries.fromLocation = locations.ID '
                 . 'join packages on deliveries.package=packages.id '
                 . 'where deliveries.fromUser=:userid';
 
@@ -87,7 +87,7 @@ class delivery_db {
         $db = Database::getDB();
         $query = 'SELECT deliveries.ID as DeliveryID, users.Name, locations.City,'
                 . ' locations.State, packages.ID as packageID, packages.status FROM `deliveries`'
-                . ' join users on users.id=deliveries.fromUser join '
+                . ' join users on users.id=deliveries.toUser join '
                 . 'locations on deliveries.FromLocation = locations.ID '
                 . 'join packages on deliveries.package=packages.id '
                 . 'where deliveries.toUser=:userid';

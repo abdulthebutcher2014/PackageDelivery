@@ -14,7 +14,7 @@
     <input type="text" name="state" maxlength="2" value="<?php echo $state ?>"<span><?php echo $errors[1];?></span><br>
     <label>Distance:</label><br>
     <input type="text" name="distance" value="<?php echo $distance ?>"><span><?php echo $errors[2];?></span><br>  
-    <input type="submit" name="parameters" value="Update Location">    
+    <input type="submit" name="parameters" value="Submit">    
 </form>
     <table>
         <tr><th>City</th><th>State</th><th>Distance</th><th></th><th></th></tr>

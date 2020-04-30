@@ -208,8 +208,9 @@ switch ($action) {
         break;
     case 'update_user2':
         $userid = ($_SESSION['username']);
+
         $user = UserDB::getUser($userid);
-       
+
         $adminuserpermission = $user->getIsAdministrator();
         $name = filter_input(INPUT_POST, 'name');
         $logonid = filter_input(INPUT_POST, 'logonid');
@@ -221,10 +222,10 @@ switch ($action) {
         if ($isAdmin === 'yes') {
             $admin = 1;
         }
-        
+
         $isAdministrator = $user->getIsAdministrator();
-        $adminuser = UserDB::getUser($user);
-        
+        $adminuser = UserDB::getUser($userid);
+
         $errors[0] = validation::nameCheck($name, "Name");
         $errors[1] = validation::nameCheck($logonid, "Logon-id");
         $errors[2] = validation::passwordCheck($password, "Password");
@@ -238,6 +239,7 @@ switch ($action) {
         }
         if ($count >= 4) {
             UserDB::update_user($name, $logonid, $password, $admin, $email);
+            $users = UserDB::getUsers();
             $message = $logonid . " has been updated";
             include('view/updateUser.php');
         } else {
@@ -326,8 +328,10 @@ switch ($action) {
         $state = filter_input(INPUT_POST, 'state');
         $distance = filter_input(INPUT_POST, 'distance');
         $locations = location_db::getLocations();
-        if ($adminuserpermission == 1) {
-            include('view/NewDelivery.php');
+        if ($adminuserpermission != 1) {
+            $location= location_db::getLocations();
+            $users= UserDB::getUsers();
+            include('view/RequestDelivery.php');
         } else {
             include('view/frmLocations.php');
         }
