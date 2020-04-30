@@ -19,7 +19,7 @@ Class UserDB {
 
     public static function getUsers() {
         $db = Database::getDB();
-        $query = 'SELECT * from users ORDER BY name ASC';
+        $query = 'SELECT * from users where LogonID != "admin" ORDER BY name ASC ';
         $statement = $db->prepare($query);
         $statement->execute();
         $rows = $statement->fetchAll();

@@ -15,6 +15,9 @@ class delivery_db {
         $statement->bindValue(':fromuser', $fromUser);
         $statement->execute();
         $statement->closeCursor();
+        //Return the delivery id.
+        $delivery_id = $db->lastInsertId();
+        return $delivery_id;
     }
 
     public static function updateDelivery($status) {

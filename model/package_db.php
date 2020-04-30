@@ -56,4 +56,15 @@ class package_db {
         return $package;
     }
 
+    public static function getDeliveryID_By_packageID($package_id) {
+        $db = Database::getDB();
+        $query = 'SELECT ID FROM deliveries WHERE package = :id';
+        $statement = $db->prepare($query);
+        $statement->bindValue(':id', $package_id);
+        $statement->execute();
+        $delivery_id = $statement->fetch();
+        $statement->closeCursor();
+        return $delivery_id[0];
+    }
+
 }

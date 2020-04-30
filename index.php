@@ -117,7 +117,9 @@ switch ($action) {
         $deliveries = array($_POST['from_location'], $_POST['to_location'], $_POST['from_user'], $_POST['to_user']);
         $delivery_from = location_db::getLocation($deliveries[0]);
         $delivery_to = location_db::getLocation($deliveries[1]);
-
+        $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         $user_from = UserDB::getUserByID($deliveries[2]);
         $user_to = UserDB::getUserByID($deliveries[3]);
         $distance = $delivery_to->getDistance();
@@ -139,20 +141,19 @@ switch ($action) {
         $user_to = UserDB::getUserByID($deliveries[3]);
         $distance = filter_input(INPUT_POST, 'distance');
         $total = filter_input(INPUT_POST, 'total');
+        $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         //now insert a new package
         $package_id = package_db::addPackage("Recieved");
         //now insert a new delivery
-        delivery_db::addDelivery($delivery_from->getId(), $delivery_to->getId(), $total, $package_id, $user_to->getId(), $user_from->getId());
-//        //set up and send e-mail
-//        $email_sender=$user_from->getEmail();
-//        $email_reciever=$user_to->getEmail();
-//        $subject="Your package ". $package_id. " , is on the way to ".$delivery_to." .";
-//        $message="Thank you for using delivery service";
-//        mail($email_sender,$subject,$message);   
-//        $subject="Expect to recieve package ". $package_id. " .";
-//        $message="Looke for a packag from delivery service.";
-//        mail($email_reciever,$subject,$message); 
+        $delivery_id = delivery_db::addDelivery($delivery_from->getId(), $delivery_to->getId(), $total, $package_id, $user_to->getId(), $user_from->getId());
+        //write to file.
+        $text = date('m/d/Y') . "|" . date('H:i:s') . "|" . $delivery_id . "|" . $package_id . "|" . "received\n";
+        $fp = fopen('delivery.log', 'a');
+        fwrite($fp, $text);
         $message = "Thank you for your request";
+        //Send e-mail.
         include ('view/ApproveDelivery.php');
         die();
         break;
@@ -190,8 +191,8 @@ switch ($action) {
         break;
     case 'update_user':
 //get a user object for the user
-        $user = UserDB::getUser($_SESSION['username']);        
-      
+        $user = UserDB::getUser($_SESSION['username']);
+
         $message = "";
         $errors = array("", "", "", "");
         $name = $user->getName();
@@ -208,6 +209,7 @@ switch ($action) {
     case 'update_user2':
         $userid = ($_SESSION['username']);
         $user = UserDB::getUser($userid);
+       
         $adminuserpermission = $user->getIsAdministrator();
         $name = filter_input(INPUT_POST, 'name');
         $logonid = filter_input(INPUT_POST, 'logonid');
@@ -219,10 +221,10 @@ switch ($action) {
         if ($isAdmin === 'yes') {
             $admin = 1;
         }
-        $user = UserDB::getUser($_SESSION['username']);
-        //$isAdministrator = $user->getIsAdministrator();
-        //$adminuser = UserDB::getUser($user);
-        $adminuserpermission = $user->getIsAdministrator();
+        
+        $isAdministrator = $user->getIsAdministrator();
+        $adminuser = UserDB::getUser($user);
+        
         $errors[0] = validation::nameCheck($name, "Name");
         $errors[1] = validation::nameCheck($logonid, "Logon-id");
         $errors[2] = validation::passwordCheck($password, "Password");
@@ -259,7 +261,7 @@ switch ($action) {
         $email = $user->getEmail();
         $isAdministrator = $user->getIsAdministrator();
         $users = UserDB::getUsers();
-        
+
         include ('view/updateUser.php');
         die();
         break;
@@ -279,7 +281,7 @@ switch ($action) {
         $password = $user->getPassword();
         $email = $user->getEmail();
         $isAdministrator = $user->getIsAdministrator();
-       
+
         $adminuserpermission = $user->getIsAdministrator();
         $users = UserDB::getUsers();
         include('view/updateUser.php');
@@ -324,11 +326,11 @@ switch ($action) {
         $state = filter_input(INPUT_POST, 'state');
         $distance = filter_input(INPUT_POST, 'distance');
         $locations = location_db::getLocations();
-        if($adminuserpermission==1){
+        if ($adminuserpermission == 1) {
             include('view/NewDelivery.php');
-        }else{
+        } else {
             include('view/frmLocations.php');
-        }        
+        }
         die();
         break;
     case 'add_location':
@@ -418,10 +420,10 @@ switch ($action) {
         $user = UserDB::getUser($userid);
         $adminuserpermission = $user->getIsAdministrator();
         $myuserid = $user->getId();
-        
+
         //get outbound deliveries
         $incoming_deliveries = delivery_db::getIncomingDeliveries($myuserid);
-     
+
         //get inbound deliveries.
         $outgoing_deliveries = delivery_db::getOutGoingDeliveries($myuserid);
 
@@ -438,20 +440,25 @@ switch ($action) {
         die();
         break;
     case 'update_package';
+        $userid = ($_SESSION['username']);
+        $user = UserDB::getUser($userid);
+        $adminuserpermission = $user->getIsAdministrator();
         $status = filter_input(INPUT_POST, 'status');
         $package_id = filter_input(INPUT_POST, 'package_id');
-        var_dump($status);
-        var_dump($package_id);
+        $delivery_id = package_db::getDeliveryID_By_packageID($package_id);
         //update the package
         if ($status == "Recieved") {
             package_db::updatePackage($package_id, "Sent");
+            $text = date('m/d/Y') . "|" . date('H:i:s') . "|" . $delivery_id . "|" . $package_id . "|" . "sent\n";
         }
         if ($status == "Sent") {
             package_db::updatePackage($package_id, "Delivered");
+            $text = date('m/d/Y') . "|" . date('H:i:s') . "|" . $delivery_id . "|" . $package_id . "|" . "delivered\n";
         }
         $userid = ($_SESSION['username']);
         $all_deliveries = delivery_db::getAllDeliveries();
-
+        $fp = fopen('delivery.log', 'a');
+        fwrite($fp, $text);
         include('view/view_all_delieveries.php');
         die();
         break;
