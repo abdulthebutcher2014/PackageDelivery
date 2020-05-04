@@ -87,6 +87,7 @@ switch ($action) {
         die();
         break;
     case 'register':
+
         $errors = array("", "", "", "");
         if (!isset($name)) {
             $name = "";
@@ -158,6 +159,9 @@ switch ($action) {
         die();
         break;
     case 'new_user':
+
+      
+        
         $errors = array("", "", "", "");
         $message = "";
         $name = filter_input(INPUT_POST, "name");
@@ -181,7 +185,9 @@ switch ($action) {
             $message = $logonid . " has been registered";
             $_SESSION['username'] = $logonid; //you are now logged on. remember your password
             $location = location_db::getLocations();
-            $user = UserDB::getUsers();
+            $users = UserDB::getUsers();
+            $user= UserDB::getUser($logonid);
+            $adminuserpermission = $user->getIsAdministrator();
             include('view/RequestDelivery.php');
         } else {
             $message = "There is an error - user wasn't added.";
