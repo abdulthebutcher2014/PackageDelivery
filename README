@@ -1,0 +1,35 @@
+Jeff Barnett 
+Capstone Spring 2020
+Delivery package project
+
+This is a rudimentary project that can be used to track package delivery.
+
+There are many things that are involved in package delivery that are not accounted 
+in this application. My hope was to stub some attributes and give a good idea on 
+how to track packages. 
+
+My focus first was to set up user access.
+
+I want to create a user id of admin with password admin so you can log in after
+starting the application for first time. You are then forced to change the admin 
+password. Other id's can be added and an admin can promote the id to admin.
+
+All deliveries are from Lincoln NE.
+
+All deliveries are direct.
+
+Locations and distances from Lincoln can be added.
+
+Shippers and consignees must be registered.
+
+I wasn't able to set up e-mail.
+
+However I did submit the tracking to a log. (see delivery.log.) 
+
+The all deliveries view should have completed deliveries removed.
+
+Time stamps should be on the deliveries.
+
+There could be many improvements.
+
+JDB
